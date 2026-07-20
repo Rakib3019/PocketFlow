@@ -20,6 +20,7 @@ class PocketMate extends StatelessWidget {
           create: (_) => UserViewModel()..loadUser(),
         ),
       ],
+
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'PocketMate',
