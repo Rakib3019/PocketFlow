@@ -1,22 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:pocket_mate/theme/app_theme.dart';
-import 'package:pocket_mate/view/screens/home/home_screen.dart';
-import 'package:pocket_mate/view/screens/splash/splash_screen.dart';
+import 'package:provider/provider.dart';
+
+import 'theme/app_theme.dart';
+import 'view/screens/splash/splash_screen.dart';
+import 'viewmodels/user_viewmodel.dart';
 
 void main() {
-  runApp(const PocketFlow());
+  runApp(const PocketMate());
 }
 
-class PocketFlow extends StatelessWidget {
-  const PocketFlow({super.key});
+class PocketMate extends StatelessWidget {
+  const PocketMate({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: "PocketFlow",
-      theme: AppTheme.lightTheme,
-      home: const SplashScreen(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => UserViewModel()..loadUser(),
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'PocketMate',
+        theme: AppTheme.lightTheme,
+        home: const SplashScreen(),
+      ),
     );
   }
 }
