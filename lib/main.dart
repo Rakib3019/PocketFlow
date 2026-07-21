@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_mate/viewmodels/navigation_viewmodel.dart';
 import 'package:pocket_mate/viewmodels/transaction_viewmodel.dart';
 import 'package:provider/provider.dart';
 
@@ -24,6 +25,10 @@ class PocketMate extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => TransactionViewModel(),
         ),
+
+        ChangeNotifierProvider(
+            create: (_) =>NavigationViewModel(),
+        )
       ],
 
       child: MaterialApp(
