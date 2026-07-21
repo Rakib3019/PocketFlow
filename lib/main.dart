@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_mate/viewmodels/transaction_viewmodel.dart';
 import 'package:provider/provider.dart';
 
 import 'theme/app_theme.dart';
@@ -18,6 +19,10 @@ class PocketMate extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => UserViewModel()..loadUser(),
+        ),
+
+        ChangeNotifierProvider(
+          create: (_) => TransactionViewModel(),
         ),
       ],
 
