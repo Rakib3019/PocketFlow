@@ -1,10 +1,11 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pocket_mate/services/storage_service.dart';
+import 'package:pocket_mate/theme/app_colors.dart';
 import 'package:pocket_mate/view/screens/home/home_screen.dart';
-
-import '../../../theme/app_colors.dart';
+import 'package:pocket_mate/view/screens/navigation/navigation_screen.dart';
+import 'package:pocket_mate/view/screens/profile/profile_setup_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -44,15 +45,32 @@ class _SplashScreenState extends State<SplashScreen> with
     );
 
     _controller.forward();
+    checkUser();
 
-    Timer(const Duration(seconds: 3), () {
+  }
+
+  Future<void> checkUser() async {
+    await Future.delayed(const Duration(seconds: 2));
+
+    final user = await StorageService.loadUser();
+
+    if (!mounted) return;
+
+    if (user != null && user.isProfileCompleted) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (_) => const HomeScreen(),
+          builder: (_) => const NavigationScreen(),
         ),
       );
-    });
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const ProfileSetupScreen(),
+        ),
+      );
+    }
   }
 
 
@@ -98,7 +116,7 @@ class _SplashScreenState extends State<SplashScreen> with
               height: 280,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColors.primary.withOpacity(.08),
+                color: AppColors.primary,
               ),
             ),
           ),
@@ -112,7 +130,7 @@ class _SplashScreenState extends State<SplashScreen> with
               height: 220,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColors.secondary.withOpacity(.10),
+                color: AppColors.secondary,
               ),
             ),
           ),
@@ -134,7 +152,7 @@ class _SplashScreenState extends State<SplashScreen> with
                     const SizedBox(height: 24),
 
                     const Text(
-                      "PocketFlow",
+                      "Pocket Mate",
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
