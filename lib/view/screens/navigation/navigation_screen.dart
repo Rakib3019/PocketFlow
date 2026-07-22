@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../viewmodels/navigation_viewmodel.dart';
 import '../../widgets/navigation/custom_bottom_nav.dart';
+import '../../widgets/transaction/add_transaction_bottom_sheet.dart';
 import '../categories/categories_screen.dart';
 import '../home/home_screen.dart';
 import '../settings/settings_screen.dart';
@@ -31,14 +32,26 @@ class NavigationScreen extends StatelessWidget {
       ),
 
       floatingActionButton: FloatingActionButton(
+        heroTag: "addTransaction",
+        backgroundColor: const Color(0xFF6C63FF),
+        elevation: 8,
         onPressed: () {
-          // TODO: Open Add Transaction Bottom Sheet
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            backgroundColor: Colors.transparent,
+            builder: (_) => const AddTransactionBottomSheet(),
+          );
         },
-        child: const Icon(Icons.add),
+        child: const Icon(
+          Icons.add_rounded,
+          size: 32,
+          color: Colors.white,
+        ),
       ),
 
       floatingActionButtonLocation:
-      FloatingActionButtonLocation.centerDocked,
+      FloatingActionButtonLocation.miniEndFloat,
 
       bottomNavigationBar: const CustomBottomNav(),
     );

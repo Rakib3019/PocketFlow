@@ -41,8 +41,6 @@ class CustomBottomNav extends StatelessWidget {
             label: "Transactions",
           ),
 
-          const SizedBox(width: 60),
-
           _NavItem(
             index: 2,
             icon: Icons.bar_chart_rounded,
