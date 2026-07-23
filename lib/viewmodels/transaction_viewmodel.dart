@@ -1,39 +1,59 @@
 import 'package:flutter/material.dart';
+
 import '../models/transaction_model.dart';
+import '../repositories/transaction_repository.dart';
 
 class TransactionViewModel extends ChangeNotifier {
+  final TransactionRepository _repository = TransactionRepository();
 
-  final List<TransactionModel> _transactions = [];
+  List<TransactionModel> _transactions = [];
 
   List<TransactionModel> get transactions => _transactions;
 
-  void addTransaction(TransactionModel transaction) {
-    _transactions.add(transaction);
+  TransactionViewModel() {
+    loadTransactions();
+  }
 
+  Future<void> loadTransactions() async {
+    _transactions = await _repository.getTransactions();
     notifyListeners();
   }
 
-  void deleteTransaction(String id) {
-    _transactions.removeWhere(
-          (transaction) => transaction.id == id,
-    );
+  Future<void> addTransaction(TransactionModel transaction) async {
+    await _repository.insertTransaction(transaction);
 
-    notifyListeners();
+    await loadTransactions();
   }
 
-  double get totalIncome {
+  Future<void> deleteTransaction(String id) async {
+    await _repository.deleteTransaction(id);
+
+    await loadTransactions();
+  }
+
+  Future<void> updateTransaction(TransactionModel transaction) async {
+    await _repository.updateTransaction(transaction);
+
+    await loadTransactions();
+  }
+
+  double get totalMoneyAdded {
     return _transactions
         .where((t) => t.isIncome)
-        .fold(0, (sum, t) => sum + t.amount);
+        .fold(0.0, (sum, t) => sum + t.amount);
   }
 
   double get totalExpense {
     return _transactions
         .where((t) => !t.isIncome)
-        .fold(0, (sum, t) => sum + t.amount);
+        .fold(0.0, (sum, t) => sum + t.amount);
   }
 
-  double get balance {
-    return totalIncome - totalExpense;
+  double get currentBalance {
+    return totalMoneyAdded - totalExpense;
+  }
+
+  List<TransactionModel> get recentTransactions {
+    return _transactions.take(5).toList();
   }
 }
