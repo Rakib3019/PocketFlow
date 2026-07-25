@@ -19,6 +19,8 @@ class UserViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+
+
   /// Pick image from gallery
   Future<File?> pickImage() async {
     final XFile? image = await _picker.pickImage(
