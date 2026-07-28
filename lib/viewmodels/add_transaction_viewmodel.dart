@@ -14,7 +14,7 @@ class AddTransactionViewModel extends ChangeNotifier {
     "Cash",
     "Bank",
     "Card",
-    "bKash",
+    "Bkash",
     "Nagad",
     "Rocket",
     "Others",
@@ -27,6 +27,12 @@ class AddTransactionViewModel extends ChangeNotifier {
   String _paymentMethod = defaultPaymentMethod;
   String _note = "";
 
+
+  // Message (Error / Success)
+  String? _message;
+  Color _messageColor = Colors.red;
+  IconData _messageIcon = Icons.error_outline;
+
   // Getters
   bool get isIncome => _isIncome;
 
@@ -38,39 +44,70 @@ class AddTransactionViewModel extends ChangeNotifier {
 
   String get note => _note;
 
-  // Methods
+  String? get message => _message;
 
-  /// Change Transaction Type
+  Color get messageColor => _messageColor;
+
+  IconData get messageIcon => _messageIcon;
+
+  // Transaction Type
+
+
   void changeTransactionType(bool income) {
     _isIncome = income;
     notifyListeners();
   }
 
-  /// Select Category
+
+  // Category
+
+
   void selectCategory(String category) {
     _selectedCategory = category;
-    notifyListeners();
+    clearMessage();
   }
 
-  /// Change Date
+// Date
   void changeDate(DateTime date) {
     _selectedDate = date;
     notifyListeners();
   }
 
-  /// Change Payment Method
+  // Payment Method
   void changePaymentMethod(String method) {
     _paymentMethod = method;
     notifyListeners();
   }
 
-  /// Change Note
+  // Note
   void changeNote(String value) {
     _note = value;
     notifyListeners();
   }
 
-  /// Reset Form
+
+  // Messages
+  void showError(String message) {
+    _message = message;
+    _messageColor = Colors.red;
+    _messageIcon = Icons.error_outline;
+    notifyListeners();
+  }
+
+  void showSuccess(String message) {
+    _message = message;
+    _messageColor = Colors.green;
+    _messageIcon = Icons.check_circle;
+    notifyListeners();
+  }
+
+  void clearMessage() {
+    _message = null;
+    notifyListeners();
+  }
+
+
+  // Reset Form
   void reset() {
     _isIncome = false;
     amountController.clear();
@@ -79,6 +116,17 @@ class AddTransactionViewModel extends ChangeNotifier {
     _paymentMethod = defaultPaymentMethod;
     _note = "";
 
+    _message = null;
+    _messageColor = Colors.red;
+    _messageIcon = Icons.error_outline;
+
     notifyListeners();
+  }
+
+//dispose
+  @override
+  void dispose() {
+    amountController.dispose();
+    super.dispose();
   }
 }

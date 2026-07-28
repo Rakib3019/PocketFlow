@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_mate/view/screens/history/history_screen.dart';
 import 'package:provider/provider.dart';
 
+import '../../../viewmodels/add_transaction_viewmodel.dart';
 import '../../../viewmodels/navigation_viewmodel.dart';
 import '../../widgets/navigation/custom_bottom_nav.dart';
 import '../../widgets/transaction/add_transaction_bottom_sheet.dart';
@@ -8,7 +10,6 @@ import '../categories/categories_screen.dart';
 import '../home/home_screen.dart';
 import '../settings/settings_screen.dart';
 import '../statistics/statistics_screen.dart';
-import '../transactions/transactions_screen.dart';
 
 class NavigationScreen extends StatelessWidget {
   const NavigationScreen({super.key});
@@ -19,7 +20,7 @@ class NavigationScreen extends StatelessWidget {
 
     final pages = [
       HomeScreen(),
-      TransactionsScreen(),
+      HistoryScreen(),
       StatisticsScreen(),
       CategoriesScreen(),
       SettingsScreen(),
@@ -31,17 +32,22 @@ class NavigationScreen extends StatelessWidget {
         children: pages,
       ),
 
+///floating button
       floatingActionButton: FloatingActionButton(
         heroTag: "addTransaction",
         backgroundColor: const Color(0xFF6C63FF),
         elevation: 8,
-        onPressed: () {
-          showModalBottomSheet(
+        onPressed: () async {
+          await showModalBottomSheet(
             context: context,
             isScrollControlled: true,
             backgroundColor: Colors.transparent,
             builder: (_) => const AddTransactionBottomSheet(),
           );
+
+          if (context.mounted) {
+            context.read<AddTransactionViewModel>().reset();
+          }
         },
         child: const Icon(
           Icons.add_rounded,

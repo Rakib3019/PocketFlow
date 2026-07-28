@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+
 import 'package:pocket_mate/view/widgets/transaction/amount_field.dart';
 import 'package:pocket_mate/view/widgets/transaction/date_selector.dart';
 import 'package:pocket_mate/view/widgets/transaction/note_field.dart';
 import 'package:pocket_mate/view/widgets/transaction/payment_method_selector.dart';
-import 'package:pocket_mate/view/widgets/transaction/save_transaction_button.dart';
-
+import 'package:provider/provider.dart';
+import '../../../viewmodels/add_transaction_viewmodel.dart';
 import 'category_selector.dart';
 import 'income_expense_selector.dart';
+import 'save_transaction_button.dart';
 
 class AddTransactionBottomSheet extends StatelessWidget {
   const AddTransactionBottomSheet({super.key});
@@ -20,6 +22,7 @@ class AddTransactionBottomSheet extends StatelessWidget {
         padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom,
         ),
+
         child: Container(
           padding: const EdgeInsets.all(20),
           decoration: const BoxDecoration(
@@ -28,11 +31,12 @@ class AddTransactionBottomSheet extends StatelessWidget {
               top: Radius.circular(28),
             ),
           ),
+
           child: SingleChildScrollView(
-            child: const Column(
+            child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(height: 20),
+                SizedBox(height:20),
                 Text(
                   "Add Transaction",
                   style: TextStyle(
@@ -40,25 +44,65 @@ class AddTransactionBottomSheet extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-
+///expense selector
                 SizedBox(height: 12),
                 IncomeExpenseSelector(),
+///errore message
+                SizedBox(height: 2),
+                Consumer<AddTransactionViewModel>(
+                  builder: (context, vm, child) {
+                    if (vm.message == null) {
+                      return const SizedBox.shrink();
+                    }
 
-                SizedBox(height: 12),
+                    return AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      width: double.infinity,
+                      margin: const EdgeInsets.only(top: 16, bottom: 16),
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: vm.messageColor.withOpacity(.10),
+                        border: Border.all(color: vm.messageColor),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            vm.messageIcon,
+                            color: vm.messageColor,
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              vm.message!,
+                              style: TextStyle(
+                                color: vm.messageColor,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+///amount
+                SizedBox(height:8),
                 AmountField(),
-
-                SizedBox(height: 12),
+///category
+                SizedBox(height: 8),
                 CategorySelector(),
-
-                SizedBox(height: 12),
+///payment method
+                SizedBox(height: 8),
                 PaymentMethodSelector(),
-
-                SizedBox(height: 12),
+///date
+                SizedBox(height: 8),
                 DateSelector(),
-
-                SizedBox(height: 12),
+///note
+                SizedBox(height: 8),
                 NoteField(),
-
+///save button
                 SizedBox(height: 22),
                 SaveTransactionButton(),
               ],
