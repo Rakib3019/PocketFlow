@@ -32,7 +32,7 @@ class DatabaseService {
       Database db,
       int version,
       ) async {
-    // Transactions Table
+// Transactions Table
     await db.execute('''
       CREATE TABLE transactions(
         id TEXT PRIMARY KEY,
@@ -47,7 +47,7 @@ class DatabaseService {
       )
     ''');
 
-    // Categories Table
+// Categories Table
     await db.execute('''
       CREATE TABLE categories(
         id TEXT PRIMARY KEY,
@@ -59,7 +59,7 @@ class DatabaseService {
       )
     ''');
 
-    // Loans Table
+// Loans Table
     await db.execute('''
       CREATE TABLE loans(
         id TEXT PRIMARY KEY,
@@ -73,5 +73,15 @@ class DatabaseService {
         linkedTransactionId TEXT
       )
     ''');
+
+// Budget Table
+    await db.execute('''
+  CREATE TABLE budgets(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    amount REAL NOT NULL,
+    month INTEGER NOT NULL,
+    year INTEGER NOT NULL
+  )
+''');
   }
 }
