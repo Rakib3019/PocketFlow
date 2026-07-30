@@ -11,6 +11,8 @@ class TransactionViewModel extends ChangeNotifier {
 
   String _searchQuery = "";
 
+  TransactionTypeFilter _typeFilter = TransactionTypeFilter.all;
+
   TransactionFilter _filter = TransactionFilter.thisMonth;
 
   /// Getters
@@ -18,14 +20,16 @@ class TransactionViewModel extends ChangeNotifier {
 
   String get searchQuery => _searchQuery;
 
+  TransactionTypeFilter get typeFilter => _typeFilter;
+
   TransactionFilter get filter => _filter;
 
   TransactionViewModel() {
     loadTransactions();
   }
 
-
   /// Database
+
   Future<void> loadTransactions() async {
     _transactions = await _repository.getTransactions();
     notifyListeners();
@@ -46,24 +50,48 @@ class TransactionViewModel extends ChangeNotifier {
     await loadTransactions();
   }
 
-
   /// Search
+
   void searchTransactions(String query) {
     _searchQuery = query.toLowerCase();
     notifyListeners();
   }
 
+  /// Transaction Type Filter
 
-  /// Filter
+  void changeTypeFilter(TransactionTypeFilter filter) {
+    _typeFilter = filter;
+    notifyListeners();
+  }
+
+  /// Date Filter
+
   void changeFilter(TransactionFilter filter) {
     _filter = filter;
     notifyListeners();
   }
 
+  /// Current Month Expense (Budget Screen)
+
+  double get currentMonthExpense {
+    final now = DateTime.now();
+
+    return _transactions
+        .where(
+          (t) =>
+      !t.isIncome &&
+          t.date.month == now.month &&
+          t.date.year == now.year,
+    )
+        .fold(0.0, (sum, t) => sum + t.amount);
+  }
+
+  /// Filtered Transactions
+
   List<TransactionModel> get filteredTransactions {
     Iterable<TransactionModel> list = _transactions;
 
-/// Search
+    // Search
     if (_searchQuery.isNotEmpty) {
       list = list.where((transaction) {
         return transaction.categoryId
@@ -78,8 +106,23 @@ class TransactionViewModel extends ChangeNotifier {
       });
     }
 
+    // Transaction Type Filter
+    switch (_typeFilter) {
+      case TransactionTypeFilter.all:
+        break;
+
+      case TransactionTypeFilter.income:
+        list = list.where((t) => t.isIncome);
+        break;
+
+      case TransactionTypeFilter.expense:
+        list = list.where((t) => !t.isIncome);
+        break;
+    }
+
     final now = DateTime.now();
 
+    // Date Filter
     switch (_filter) {
       case TransactionFilter.thisWeek:
         final startOfWeek = DateTime(
@@ -113,7 +156,8 @@ class TransactionViewModel extends ChangeNotifier {
     return list.toList();
   }
 
- /// Dashboard
+  /// Dashboard
+
   List<TransactionModel> get recentTransactions {
     return _transactions.take(5).toList();
   }

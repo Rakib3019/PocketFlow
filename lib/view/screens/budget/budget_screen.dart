@@ -11,15 +11,30 @@ import '../../widgets/budget/budget_progress_card.dart';
 import '../../widgets/budget/budget_insight_card.dart';
 import '../../widgets/budget/edit_budget_dialog.dart';
 
-class BudgetScreen extends StatelessWidget {
+class BudgetScreen extends StatefulWidget {
   const BudgetScreen({super.key});
 
+  @override
+  State<BudgetScreen> createState() => _BudgetScreenState();
+}
+
+class _BudgetScreenState extends State<BudgetScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+
+    Future.microtask(() {
+      context.read<BudgetViewModel>().loadCurrentBudget();
+    });
+  }
   @override
   Widget build(BuildContext context) {
     final budgetVM = context.watch<BudgetViewModel>();
     final transactionVM = context.watch<TransactionViewModel>();
 
-    final expense = transactionVM.totalExpense;
+
+    final expense = transactionVM.currentMonthExpense;
 
     return Scaffold(
       backgroundColor: const Color(0xffF8FAFC),
