@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:pocket_mate/view/screens/history/history_screen.dart';
+import 'package:pocket_mate/view/screens/loan/loan_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../../viewmodels/add_transaction_viewmodel.dart';
 import '../../../viewmodels/navigation_viewmodel.dart';
+import '../../widgets/loan/add_loan_bottom_sheet.dart';
 import '../../widgets/navigation/custom_bottom_nav.dart';
 import '../../widgets/transaction/add_transaction_bottom_sheet.dart';
-import '../categories/categories_screen.dart';
 import '../home/home_screen.dart';
-import '../settings/settings_screen.dart';
 import '../statistics/statistics_screen.dart';
 
 
@@ -24,8 +24,7 @@ class NavigationScreen extends StatelessWidget {
       HomeScreen(),
       HistoryScreen(),
       StatisticsScreen(),
-      CategoriesScreen(),
-      SettingsScreen(),
+      LoanScreen(),
     ];
 
     return Scaffold(
@@ -35,7 +34,26 @@ class NavigationScreen extends StatelessWidget {
       ),
 
 ///floating button
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: navigationVM.currentIndex == 3
+          ? FloatingActionButton(
+        heroTag: "addLoan",
+        backgroundColor: const Color(0xFF6C63FF),
+        elevation: 8,
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            backgroundColor: Colors.transparent,
+            builder: (_) => const AddLoanBottomSheet(),
+          );
+        },
+        child: const Icon(
+          Icons.payment_rounded,
+          color: Colors.white,
+          size: 30,
+        ),
+      )
+          : FloatingActionButton(
         heroTag: "addTransaction",
         backgroundColor: const Color(0xFF6C63FF),
         elevation: 8,
@@ -53,8 +71,8 @@ class NavigationScreen extends StatelessWidget {
         },
         child: const Icon(
           Icons.add_rounded,
-          size: 32,
           color: Colors.white,
+          size: 32,
         ),
       ),
 

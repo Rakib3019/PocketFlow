@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pocket_mate/viewmodels/add_transaction_viewmodel.dart';
 import 'package:pocket_mate/viewmodels/budget_viewmodel.dart';
 import 'package:pocket_mate/viewmodels/category_viewmodel.dart';
+import 'package:pocket_mate/viewmodels/loan_viewmodel.dart';
 import 'package:pocket_mate/viewmodels/navigation_viewmodel.dart';
 import 'package:pocket_mate/viewmodels/transaction_viewmodel.dart';
 import 'package:provider/provider.dart';
@@ -43,6 +44,10 @@ class PocketMate extends StatelessWidget {
 
         ChangeNotifierProvider(
           create: (_) => BudgetViewModel(),
+        ),
+
+        ChangeNotifierProvider(
+          create: (_) => LoanViewModel(),
         ),
       ],
 

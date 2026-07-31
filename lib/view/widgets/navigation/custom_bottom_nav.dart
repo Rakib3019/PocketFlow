@@ -49,8 +49,8 @@ class CustomBottomNav extends StatelessWidget {
 
           _NavItem(
             index: 3,
-            icon: Icons.settings_rounded,
-            label: "Settings",
+            icon: Icons.handshake,
+            label: "Loans",
           ),
         ],
       ),
