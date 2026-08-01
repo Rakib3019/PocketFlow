@@ -1,5 +1,6 @@
 class TransactionModel {
   final String id;
+
   final double amount;
 
   /// false = Expense
@@ -17,8 +18,11 @@ class TransactionModel {
 
   final DateTime createdAt;
 
-  /// For future Borrow & Lend
+  /// Used for Loan Transactions
   final String? linkedLoanId;
+
+  /// Should this transaction affect Monthly Budget?
+  final bool affectsBudget;
 
   const TransactionModel({
     required this.id,
@@ -30,6 +34,7 @@ class TransactionModel {
     required this.date,
     required this.createdAt,
     this.linkedLoanId,
+    this.affectsBudget = true,
   });
 
   TransactionModel copyWith({
@@ -42,6 +47,7 @@ class TransactionModel {
     DateTime? date,
     DateTime? createdAt,
     String? linkedLoanId,
+    bool? affectsBudget,
   }) {
     return TransactionModel(
       id: id ?? this.id,
@@ -53,6 +59,7 @@ class TransactionModel {
       date: date ?? this.date,
       createdAt: createdAt ?? this.createdAt,
       linkedLoanId: linkedLoanId ?? this.linkedLoanId,
+      affectsBudget: affectsBudget ?? this.affectsBudget,
     );
   }
 
@@ -67,10 +74,13 @@ class TransactionModel {
       'date': date.toIso8601String(),
       'createdAt': createdAt.toIso8601String(),
       'linkedLoanId': linkedLoanId,
+      'affectsBudget': affectsBudget ? 1 : 0,
     };
   }
 
-  factory TransactionModel.fromMap(Map<String, dynamic> map) {
+  factory TransactionModel.fromMap(
+      Map<String, dynamic> map,
+      ) {
     return TransactionModel(
       id: map['id'],
       amount: map['amount'].toDouble(),
@@ -81,6 +91,8 @@ class TransactionModel {
       date: DateTime.parse(map['date']),
       createdAt: DateTime.parse(map['createdAt']),
       linkedLoanId: map['linkedLoanId'],
+      affectsBudget:
+      (map['affectsBudget'] ?? 1) == 1,
     );
   }
 }

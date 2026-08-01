@@ -71,8 +71,7 @@ class TransactionViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Current Month Expense (Budget Screen)
-
+  /// Current Month Expense (Budget Only)
   double get currentMonthExpense {
     final now = DateTime.now();
 
@@ -80,10 +79,14 @@ class TransactionViewModel extends ChangeNotifier {
         .where(
           (t) =>
       !t.isIncome &&
+          t.affectsBudget &&
           t.date.month == now.month &&
           t.date.year == now.year,
     )
-        .fold(0.0, (sum, t) => sum + t.amount);
+        .fold(
+      0.0,
+          (sum, t) => sum + t.amount,
+    );
   }
 
   /// Filtered Transactions

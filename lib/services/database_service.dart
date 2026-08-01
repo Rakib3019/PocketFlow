@@ -23,8 +23,15 @@ class DatabaseService {
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: _createDatabase,
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < 2) {
+          await db.execute(
+            'ALTER TABLE transactions ADD COLUMN affectsBudget INTEGER DEFAULT 1',
+          );
+        }
+      },
     );
   }
 
@@ -32,56 +39,58 @@ class DatabaseService {
       Database db,
       int version,
       ) async {
-// Transactions Table
-    await db.execute('''
-      CREATE TABLE transactions(
-        id TEXT PRIMARY KEY,
-        amount REAL,
-        isIncome INTEGER,
-        categoryId TEXT,
-        paymentMethod TEXT,
-        note TEXT,
-        date TEXT,
-        createdAt TEXT,
-        linkedLoanId TEXT
-      )
-    ''');
 
-// Categories Table
+/// Transactions Table
     await db.execute('''
-      CREATE TABLE categories(
-        id TEXT PRIMARY KEY,
-        name TEXT,
-        icon INTEGER,
-        color INTEGER,
-        isExpense INTEGER,
-        isDefault INTEGER
-      )
-    ''');
+    CREATE TABLE transactions(
+      id TEXT PRIMARY KEY,
+      amount REAL,
+      isIncome INTEGER,
+      categoryId TEXT,
+      paymentMethod TEXT,
+      note TEXT,
+      date TEXT,
+      createdAt TEXT,
+      linkedLoanId TEXT,
+      affectsBudget INTEGER
+    )
+  ''');
 
-// Loans Table
+/// Categories Table
     await db.execute('''
-      CREATE TABLE loans(
-        id TEXT PRIMARY KEY,
-        person TEXT,
-        amount REAL,
-        isBorrowed INTEGER,
-        date TEXT,
-        dueDate TEXT,
-        note TEXT,
-        status TEXT,
-        linkedTransactionId TEXT
-      )
-    ''');
+    CREATE TABLE categories(
+      id TEXT PRIMARY KEY,
+      name TEXT,
+      icon INTEGER,
+      color INTEGER,
+      isExpense INTEGER,
+      isDefault INTEGER
+    )
+  ''');
 
-// Budget Table
+/// Loans Table
     await db.execute('''
-  CREATE TABLE budgets(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    amount REAL NOT NULL,
-    month INTEGER NOT NULL,
-    year INTEGER NOT NULL
-  )
-''');
+    CREATE TABLE loans(
+      id TEXT PRIMARY KEY,
+      person TEXT,
+      amount REAL,
+      isBorrowed INTEGER,
+      date TEXT,
+      dueDate TEXT,
+      note TEXT,
+      status TEXT,
+      linkedTransactionId TEXT
+    )
+  ''');
+
+/// Budget Table
+    await db.execute('''
+    CREATE TABLE budgets(
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      amount REAL NOT NULL,
+      month INTEGER NOT NULL,
+      year INTEGER NOT NULL
+    )
+  ''');
   }
 }
