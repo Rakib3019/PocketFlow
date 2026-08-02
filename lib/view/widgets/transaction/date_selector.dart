@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../../viewmodels/add_transaction_viewmodel.dart';
+import '../../../viewmodels/transaction/add_transaction_viewmodel.dart';
 
 class DateSelector extends StatelessWidget {
   const DateSelector({super.key});

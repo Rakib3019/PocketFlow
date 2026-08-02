@@ -3,7 +3,7 @@ import 'package:pocket_mate/view/screens/history/history_screen.dart';
 import 'package:pocket_mate/view/screens/loan/loan_screen.dart';
 import 'package:provider/provider.dart';
 
-import '../../../viewmodels/add_transaction_viewmodel.dart';
+import '../../../viewmodels/transaction/add_transaction_viewmodel.dart';
 import '../../../viewmodels/navigation_viewmodel.dart';
 import '../../widgets/loan/add_loan_bottom_sheet.dart';
 import '../../widgets/navigation/custom_bottom_nav.dart';

@@ -5,7 +5,7 @@ import 'package:pocket_mate/view/widgets/transaction/date_selector.dart';
 import 'package:pocket_mate/view/widgets/transaction/note_field.dart';
 import 'package:pocket_mate/view/widgets/transaction/payment_method_selector.dart';
 import 'package:provider/provider.dart';
-import '../../../viewmodels/add_transaction_viewmodel.dart';
+import '../../../viewmodels/transaction/add_transaction_viewmodel.dart';
 import 'category_selector.dart';
 import 'income_expense_selector.dart';
 import 'save_transaction_button.dart';

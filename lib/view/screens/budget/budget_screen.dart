@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../viewmodels/budget_viewmodel.dart';
-import '../../../viewmodels/transaction_viewmodel.dart';
+import '../../../viewmodels/transaction/transaction_viewmodel.dart';
 
 import '../../widgets/budget/budget_app_bar.dart';
 import '../../widgets/budget/budget_balance_card.dart';

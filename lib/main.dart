@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:pocket_mate/viewmodels/add_transaction_viewmodel.dart';
+import 'package:pocket_mate/viewmodels/transaction/add_transaction_viewmodel.dart';
 import 'package:pocket_mate/viewmodels/budget_viewmodel.dart';
 import 'package:pocket_mate/viewmodels/category_viewmodel.dart';
-import 'package:pocket_mate/viewmodels/loan_viewmodel.dart';
+import 'package:pocket_mate/viewmodels/loan/loan_viewmodel.dart';
 import 'package:pocket_mate/viewmodels/navigation_viewmodel.dart';
-import 'package:pocket_mate/viewmodels/transaction_viewmodel.dart';
+import 'package:pocket_mate/viewmodels/transaction/transaction_viewmodel.dart';
 import 'package:provider/provider.dart';
 
 import 'theme/app_theme.dart';

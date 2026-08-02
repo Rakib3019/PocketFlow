@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/category_model.dart';
-import '../../../viewmodels/add_transaction_viewmodel.dart';
+import '../../../viewmodels/transaction/add_transaction_viewmodel.dart';
 import '../../../viewmodels/category_viewmodel.dart';
 
 class CategorySelector extends StatelessWidget {

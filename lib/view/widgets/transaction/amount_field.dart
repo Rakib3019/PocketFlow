@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../theme/app_colors.dart';
-import '../../../viewmodels/add_transaction_viewmodel.dart';
+import '../../../viewmodels/transaction/add_transaction_viewmodel.dart';
 
 class AmountField extends StatelessWidget {
   const AmountField({super.key});
