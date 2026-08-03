@@ -180,4 +180,65 @@ class TransactionViewModel extends ChangeNotifier {
   double get currentBalance {
     return totalMoneyAdded - totalExpense;
   }
+
+  /// Top Expense Categories
+  Map<String, double> get expenseCategoryData {
+    final Map<String, double> data = {};
+
+    for (final transaction in _transactions) {
+      if (transaction.isIncome) continue;
+
+      // Ignore loan transactions
+      if (transaction.linkedLoanId != null) continue;
+
+      data.update(
+        transaction.categoryId,
+            (value) => value + transaction.amount,
+        ifAbsent: () => transaction.amount,
+      );
+    }
+
+    return data;
+  }
+
+  ///
+  List<MapEntry<String, double>> get topExpenseCategories {
+    final list = expenseCategoryData.entries.toList();
+
+    list.sort(
+          (a, b) => b.value.compareTo(a.value),
+    );
+
+    return list.take(4).toList();
+  }
+
+ ///
+  double get otherExpenseAmount {
+    final list = expenseCategoryData.entries.toList();
+
+    list.sort(
+          (a, b) => b.value.compareTo(a.value),
+    );
+
+    if (list.length <= 4) {
+      return 0;
+    }
+
+    return list
+        .skip(4)
+        .fold(
+      0.0,
+          (sum, item) => sum + item.value,
+    );
+  }
+
+///
+
+  double get totalExpenseForChart {
+    return expenseCategoryData.values.fold(
+      0.0,
+          (sum, value) => sum + value,
+    );
+  }
+
 }
