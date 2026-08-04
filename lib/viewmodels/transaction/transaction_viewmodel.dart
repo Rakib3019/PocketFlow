@@ -165,12 +165,29 @@ class TransactionViewModel extends ChangeNotifier {
     return _transactions.take(5).toList();
   }
 
+  /// Total Money Added (All Time)
   double get totalMoneyAdded {
     return _transactions
         .where((t) => t.isIncome)
         .fold(0.0, (sum, t) => sum + t.amount);
   }
 
+  /// Current Month Money Added
+  double get currentMonthMoneyAdded {
+    final now = DateTime.now();
+
+    return _transactions
+        .where(
+          (t) =>
+      t.isIncome &&
+          t.date.month == now.month &&
+          t.date.year == now.year,
+    )
+        .fold(
+      0.0,
+          (sum, t) => sum + t.amount,
+    );
+  }
   double get totalExpense {
     return _transactions
         .where((t) => !t.isIncome)
@@ -239,6 +256,108 @@ class TransactionViewModel extends ChangeNotifier {
       0.0,
           (sum, value) => sum + value,
     );
+  }
+
+  /// Statistics - Last 6 Months Data
+  /// Money Added of the last 6 months
+  List<double> get monthlyIncomeData {
+    final now = DateTime.now();
+    List<double> data = [];
+
+    for (int i = 5; i >= 0; i--) {
+      final month = DateTime(now.year, now.month - i);
+
+      final total = _transactions
+          .where(
+            (t) =>
+        t.isIncome &&
+            t.date.month == month.month &&
+            t.date.year == month.year,
+      )
+          .fold<double>(
+        0.0,
+            (sum, t) => sum + t.amount,
+      );
+
+      data.add(total);
+    }
+
+    return data;
+  }
+
+  /// Expense (Budget Only) of the last 6 months
+  /// Loan transactions are excluded because affectsBudget == false
+  List<double> get monthlyExpenseData {
+    final now = DateTime.now();
+    List<double> data = [];
+
+    for (int i = 5; i >= 0; i--) {
+      final month = DateTime(now.year, now.month - i);
+
+      final total = _transactions
+          .where(
+            (t) =>
+        !t.isIncome &&
+            t.affectsBudget &&
+            t.date.month == month.month &&
+            t.date.year == month.year,
+      )
+          .fold<double>(
+        0.0,
+            (sum, t) => sum + t.amount,
+      );
+
+      data.add(total);
+    }
+
+    return data;
+  }
+
+  /// Saving = Money Added - Expense
+  List<double> get monthlySavingData {
+    List<double> data = [];
+
+    for (int i = 0; i < 6; i++) {
+      data.add(
+        monthlyIncomeData[i] - monthlyExpenseData[i],
+      );
+    }
+
+    return data;
+  }
+
+
+  /// Weekly Expense (Last 7 Days)
+
+  List<double> get weeklyExpenseData {
+    final now = DateTime.now();
+    List<double> data = [];
+
+    for (int i = 6; i >= 0; i--) {
+      final day = DateTime(
+        now.year,
+        now.month,
+        now.day,
+      ).subtract(Duration(days: i));
+
+      final total = _transactions
+          .where(
+            (t) =>
+        !t.isIncome &&
+            t.affectsBudget &&
+            t.date.year == day.year &&
+            t.date.month == day.month &&
+            t.date.day == day.day,
+      )
+          .fold<double>(
+        0.0,
+            (sum, t) => sum + t.amount,
+      );
+
+      data.add(total);
+    }
+
+    return data;
   }
 
 }

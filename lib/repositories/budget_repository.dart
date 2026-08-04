@@ -86,7 +86,7 @@ class BudgetRepository {
 
     final result = await db.query(
       'budgets',
-      orderBy: 'year DESC, month DESC',
+      orderBy: 'year ASC, month ASC',
     );
 
     return result

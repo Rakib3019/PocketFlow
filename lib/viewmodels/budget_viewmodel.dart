@@ -4,24 +4,54 @@ import '../models/budget_model.dart';
 import '../repositories/budget_repository.dart';
 
 class BudgetViewModel extends ChangeNotifier {
+  /// Repository
+
   final BudgetRepository _repository = BudgetRepository();
+
+  /// Variables
 
   BudgetModel? _currentBudget;
 
-  BudgetModel? get currentBudget => _currentBudget;
+  List<BudgetModel> _budgets = [];
+
+
+  /// Constructor
 
   BudgetViewModel() {
     loadCurrentBudget();
+    loadBudgets();
   }
+
+
+  /// Getters
+
+  BudgetModel? get currentBudget => _currentBudget;
+
+  List<BudgetModel> get budgets => _budgets;
+
+  double get budgetAmount => _currentBudget?.amount ?? 0;
+
+  bool get hasBudget => _currentBudget != null;
+
+
+  /// Load Data
 
   /// Load current month's budget
   Future<void> loadCurrentBudget() async {
     _currentBudget = await _repository.getCurrentBudget();
-
     notifyListeners();
   }
 
-  /// Save or Update Budget
+  /// Load all budgets
+  Future<void> loadBudgets() async {
+    _budgets = await _repository.getAllBudgets();
+    notifyListeners();
+  }
+
+
+  /// Save Budget
+
+
   Future<void> saveBudget(double amount) async {
     final now = DateTime.now();
 
@@ -45,9 +75,12 @@ class BudgetViewModel extends ChangeNotifier {
     }
 
     await loadCurrentBudget();
+    await loadBudgets();
   }
 
+
   /// Delete Budget
+
   Future<void> deleteBudget() async {
     if (_currentBudget == null) return;
 
@@ -55,18 +88,13 @@ class BudgetViewModel extends ChangeNotifier {
 
     _currentBudget = null;
 
+    await loadBudgets();
+
     notifyListeners();
   }
 
 
-  /// Getters
-
-
-  double get budgetAmount =>
-      _currentBudget?.amount ?? 0;
-
-  bool get hasBudget =>
-      _currentBudget != null;
+  /// Budget Calculations
 
   /// Remaining Budget
   double remainingBudget(double expense) {
@@ -97,5 +125,36 @@ class BudgetViewModel extends ChangeNotifier {
     }
 
     return expense - budgetAmount;
+  }
+
+
+  /// Statistics
+
+  /// Last 6 Months Budget Data
+  List<double> get monthlyBudgetData {
+    final now = DateTime.now();
+
+    List<double> data = [];
+
+    for (int i = 5; i >= 0; i--) {
+      final month = DateTime(
+        now.year,
+        now.month - i,
+      );
+
+      final budget = _budgets.where(
+            (b) =>
+        b.month == month.month &&
+            b.year == month.year,
+      );
+
+      if (budget.isEmpty) {
+        data.add(0);
+      } else {
+        data.add(budget.first.amount);
+      }
+    }
+
+    return data;
   }
 }
