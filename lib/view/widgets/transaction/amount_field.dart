@@ -3,13 +3,15 @@ import 'package:provider/provider.dart';
 
 import '../../../theme/app_colors.dart';
 import '../../../viewmodels/transaction/add_transaction_viewmodel.dart';
+import '../../../viewmodels/transaction/transaction_viewmodel.dart';
 
 class AmountField extends StatelessWidget {
   const AmountField({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final vm = context.watch<AddTransactionViewModel>();
+    final addVM = context.watch<AddTransactionViewModel>();
+    final transactionVM = context.watch<TransactionViewModel>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -25,7 +27,7 @@ class AmountField extends StatelessWidget {
         const SizedBox(height: 10),
 
         TextField(
-          controller: vm.amountController,
+          controller: addVM.amountController,
           keyboardType: const TextInputType.numberWithOptions(
             decimal: true,
           ),
@@ -64,7 +66,44 @@ class AmountField extends StatelessWidget {
               ),
             ),
           ),
-        )
+        ),
+
+        if (!addVM.isIncome &&
+            addVM.amount > transactionVM.currentBalance &&
+            addVM.amount > 0)
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.red.withOpacity(.08),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: Colors.red.shade300,
+                ),
+              ),
+              child: const Row(
+                children: [
+                  Icon(
+                    Icons.warning_amber_rounded,
+                    color: Colors.red,
+                    size: 18,
+                  ),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      "Insufficient Balance",
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
       ],
     );
   }

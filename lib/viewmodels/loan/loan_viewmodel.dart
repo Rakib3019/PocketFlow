@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_mate/viewmodels/transaction/transaction_viewmodel.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../models/loan_model.dart';
@@ -76,10 +77,26 @@ class LoanViewModel extends ChangeNotifier {
     await loadLoans();
   }
 
-
   /// Loan Settlement
+
   /// Mark Loan as Paid
-  Future<void> markAsPaid(LoanModel loan) async {
+  Future<bool> markAsPaid(LoanModel loan) async {
+    // Check only borrowed loans
+    if (loan.isBorrowed) {
+      final transactions =
+      await _transactionRepository.getTransactions();
+
+      double balance = 0;
+
+      for (final t in transactions) {
+        balance += t.isIncome ? t.amount : -t.amount;
+      }
+
+      if (balance < loan.amount) {
+        return false;
+      }
+    }
+
     final updatedLoan = LoanModel(
       id: loan.id,
       person: loan.person,
@@ -98,9 +115,7 @@ class LoanViewModel extends ChangeNotifier {
       id: const Uuid().v4(),
       amount: loan.amount,
       isIncome: !loan.isBorrowed,
-      categoryId: loan.isBorrowed
-          ? "Loan Repayment"
-          : "Loan Received",
+      categoryId: loan.isBorrowed ? "Loan Repayment" : "Loan Received",
       paymentMethod: "Loan",
       note: "Loan Settlement",
       date: DateTime.now(),
@@ -114,6 +129,8 @@ class LoanViewModel extends ChangeNotifier {
     );
 
     await loadLoans();
+
+    return true;
   }
 
 
@@ -193,7 +210,7 @@ class LoanViewModel extends ChangeNotifier {
   }
 
 
-  /// Statistics
+  /// Loan screen
 
   double get totalBorrowed {
     return _loans
@@ -254,4 +271,75 @@ class LoanViewModel extends ChangeNotifier {
             (loan) => loan.status == "Paid",
       )
           .length;
+
+
+  /// Monthly Chart Data (Last 6 Months)
+
+  /// Borrowed Amount of Last 6 Months
+  List<double> get monthlyBorrowedData {
+    final now = DateTime.now();
+    List<double> data = [];
+
+    for (int i = 5; i >= 0; i--) {
+      final month = DateTime(now.year, now.month - i);
+
+      final total = _loans
+          .where(
+            (loan) =>
+        loan.isBorrowed &&
+            loan.date.month == month.month &&
+            loan.date.year == month.year,
+      )
+          .fold<double>(
+        0.0,
+            (sum, loan) => sum + loan.amount,
+      );
+
+      data.add(total);
+    }
+
+    return data;
+  }
+
+  /// Lent Amount of Last 6 Months
+  List<double> get monthlyLentData {
+    final now = DateTime.now();
+    List<double> data = [];
+
+    for (int i = 5; i >= 0; i--) {
+      final month = DateTime(now.year, now.month - i);
+
+      final total = _loans
+          .where(
+            (loan) =>
+        !loan.isBorrowed &&
+            loan.date.month == month.month &&
+            loan.date.year == month.year,
+      )
+          .fold<double>(
+        0.0,
+            (sum, loan) => sum + loan.amount,
+      );
+
+      data.add(total);
+    }
+
+    return data;
+  }
+
+  /// Average Borrowed
+  double get averageBorrowed {
+    if (monthlyBorrowedData.isEmpty) return 0;
+
+    return monthlyBorrowedData.reduce((a, b) => a + b) /
+        monthlyBorrowedData.length;
+  }
+
+  /// Average Lent
+  double get averageLent {
+    if (monthlyLentData.isEmpty) return 0;
+
+    return monthlyLentData.reduce((a, b) => a + b) /
+        monthlyLentData.length;
+  }
 }

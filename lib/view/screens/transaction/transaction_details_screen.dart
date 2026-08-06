@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../models/transaction_model.dart';
 import '../../../viewmodels/transaction/transaction_viewmodel.dart';
-import '../../widgets/history/delete_transaction_dialog.dart';
+import '../../widgets/transaction/delete_transaction_dialog.dart';
 import 'package:provider/provider.dart';
 
 

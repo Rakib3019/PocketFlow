@@ -5,10 +5,10 @@ import '../../../viewmodels/loan/add_loan_viewmodel.dart';
 import 'laon_note_field.dart';
 import 'loan_due_date_selector.dart';
 import 'loan_type_selector.dart';
-import 'person_name_field.dart';
+import 'loan_person_name_field.dart';
 import 'loan_amount_field.dart';
 import 'loan_date_selector.dart';
-import 'save_loan_button.dart';
+import 'loan_save_button.dart';
 
 class AddLoanBottomSheet extends StatelessWidget {
   const AddLoanBottomSheet({super.key});

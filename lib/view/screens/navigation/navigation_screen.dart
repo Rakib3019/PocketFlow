@@ -9,7 +9,7 @@ import '../../widgets/navigation/custom_bottom_nav.dart';
 import '../../widgets/transaction/add_transaction_bottom_sheet.dart';
 import '../home/home_screen.dart';
 import '../statistics/statistics_screen.dart';
-import '../transaction/history_screen.dart';
+import '../transaction/transaction_screen.dart';
 
 
 
