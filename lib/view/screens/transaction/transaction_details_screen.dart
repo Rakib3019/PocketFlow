@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_mate/utils/default_categories.dart';
 import '../../../models/transaction_model.dart';
 import '../../../viewmodels/transaction/transaction_viewmodel.dart';
 import '../../widgets/transaction/delete_transaction_dialog.dart';
@@ -84,7 +85,7 @@ class TransactionDetailsScreen extends StatelessWidget {
                   const SizedBox(height: 18),
 
                   Text(
-                    transaction.categoryId,
+                      transaction.categoryId,
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -121,7 +122,9 @@ class TransactionDetailsScreen extends StatelessWidget {
 
             _buildTile(
               "Category",
-              transaction.categoryId,
+              DefaultCategories.getCategoryName(
+                transaction.categoryId,
+              ),
               Icons.category_outlined,
             ),
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../utils/default_categories.dart';
 import '../../../utils/transaction_filter.dart';
 import '../../../viewmodels/transaction/add_transaction_viewmodel.dart';
 import '../../../viewmodels/transaction/transaction_viewmodel.dart';
@@ -235,32 +236,22 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       ),
                     ),
 
-                    ...transactionVM
-                        .filteredTransactions
-                        .map(
-                          (transaction) =>
+                    ...transactionVM.filteredTransactions.map((transaction) =>
                           TransactionTile(
-                            title:
-                            transaction.categoryId,
-                            category: transaction
-                                .paymentMethod,
-                            amount:
-                            transaction.amount,
+                            title: DefaultCategories.getCategoryName(
+                              transaction.categoryId,
+                            ),
+                            category: transaction.paymentMethod,
+                            amount: transaction.amount,
                             date: transaction.date,
-                            icon: transaction
-                                .isIncome
-                                ? Icons
-                                .account_balance_wallet_rounded
-                                : Icons
-                                .shopping_bag_rounded,
-                            iconColor: transaction
-                                .isIncome
-                                ? const Color(
-                                0xff7ED6A7)
-                                : const Color(
-                                0xffFF6B6B),
-                            isIncome:
-                            transaction.isIncome,
+                            icon: transaction.isIncome
+                                ? Icons.account_balance_wallet_rounded
+                                : Icons.shopping_bag_rounded,
+                            iconColor: transaction.isIncome
+                                ? const Color(0xff7ED6A7)
+                                : const Color(0xffFF6B6B),
+                            isIncome: transaction.isIncome,
+                            note: transaction.note,
                           ),
                     ),
                   ],

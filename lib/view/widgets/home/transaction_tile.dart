@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class TransactionTile extends StatelessWidget {
   final String title;
   final String category;
+  final String? note;
   final double amount;
   final DateTime date;
   final IconData icon;
@@ -13,6 +14,7 @@ class TransactionTile extends StatelessWidget {
     super.key,
     required this.title,
     required this.category,
+    this.note,
     required this.amount,
     required this.date,
     required this.icon,
@@ -58,6 +60,7 @@ class TransactionTile extends StatelessWidget {
       ),
       child: Row(
         children: [
+          // Icon
           Container(
             height: 56,
             width: 56,
@@ -74,12 +77,16 @@ class TransactionTile extends StatelessWidget {
 
           const SizedBox(width: 16),
 
+          // Transaction information
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Title
                 Text(
                   title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w600,
@@ -88,17 +95,38 @@ class TransactionTile extends StatelessWidget {
 
                 const SizedBox(height: 4),
 
+                // Category + Date
                 Text(
                   "$category • ${formatDate(date)}",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 13,
                     color: Colors.grey.shade600,
                   ),
                 ),
+
+                // Note
+                if (note != null && note!.trim().isNotEmpty) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    note!,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey.shade500,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ],
               ],
             ),
           ),
 
+          const SizedBox(width: 10),
+
+          // Amount + arrow
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
