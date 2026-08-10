@@ -131,7 +131,7 @@ class MonthlyBudgetCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: const [
               _Legend(
-                color: Color(0xff6C63FF),
+                color: Color(0xff7ED6A7),
                 title: "Budget",
               ),
 
@@ -255,7 +255,7 @@ class MonthlyBudgetCard extends StatelessWidget {
                       BarChartRodData(
                         toY: monthlyBudget[index],
                         width: 8,
-                        color: const Color(0xff6C63FF),
+                        color: const Color(0xff7ED6A7),
                         borderRadius:
                         BorderRadius.circular(6),
                       ),

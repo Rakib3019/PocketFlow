@@ -207,14 +207,14 @@ class StatisticsLoanOverviewCard extends StatelessWidget {
             children: const [
 
               _Legend(
-                color: Color(0xff6C63FF),
+                color: Color(0xff7ED6A7),
                 title: "Borrowed",
               ),
 
               SizedBox(width: 20),
 
               _Legend(
-                color: Color(0xffFF9F43),
+                color: Color(0xffFF6B6B),
                 title: "Lent",
               ),
             ],
@@ -337,7 +337,7 @@ class StatisticsLoanOverviewCard extends StatelessWidget {
                       BarChartRodData(
                         toY: monthlyBorrowed[index],
                         width: 8,
-                        color: const Color(0xff6C63FF),
+                        color: const Color(0xff7ED6A7),
                         borderRadius:
                         BorderRadius.circular(6),
                       ),
@@ -345,7 +345,7 @@ class StatisticsLoanOverviewCard extends StatelessWidget {
                       BarChartRodData(
                         toY: monthlyLent[index],
                         width: 8,
-                        color: const Color(0xffFF9F43),
+                        color: Color(0xffFF6B6B),
                         borderRadius:
                         BorderRadius.circular(6),
                       ),
